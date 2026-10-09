@@ -1,4 +1,21 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="path-routing" content="on">
+<script>
+  // GitHub Pages: 404.html sends unknown paths here as ?/route. Put the real path back before the app starts.
+  (function (l) {
+    if (l.search[1] === '/') {
+      var decoded = l.search.slice(1).split('&').map(function (s) { return s.replace(/~and~/g, '&'); }).join('?');
+      window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+    }
+  }(window.location));
+</script>
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
 <title>The Withdrawal Reflex</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1072,6 +1089,7 @@ details.adv[open] summary { margin-bottom: 16px; }
       $("count").textContent = `Step ${STEPS.indexOf(step) + 1} of 4 · ${step.name}`;
     }
     window.scrollTo({ top: 0 });
+    syncUrl(ROUTE_OF_STEP[step.id]);
   }
 
   // Teammates' prototypes, nested as their own pages so their styles and scripts stay separate.
@@ -1134,6 +1152,7 @@ details.adv[open] summary { margin-bottom: 16px; }
     $("fBlurts").innerHTML = steps.map(([k, n]) => card(n, state.blurts[k] || "")).join("");
     $("final").hidden = false;
     $("count").textContent = "Reflection";
+    syncUrl("reflection");
     window.scrollTo({ top: 0 });
   }
   document.querySelectorAll("[data-finish]").forEach(b => b.addEventListener("click", openFinal));
@@ -1150,6 +1169,7 @@ details.adv[open] summary { margin-bottom: 16px; }
     $("module").hidden = true; $("tx").hidden = true; hideChapters(); $("final").hidden = true;
     showOverview(true);
     $("count").textContent = "Scene 2 of 2";
+    syncUrl("overview");
   }
 
   function go(scene) {
@@ -1158,6 +1178,7 @@ details.adv[open] summary { margin-bottom: 16px; }
     $("scene2").hidden = scene !== 2;
     $("count").textContent = `Scene ${scene} of 2`;
     window.scrollTo({ top: 0 });
+    syncUrl(scene === 1 ? "" : "overview");
   }
 
   // ===================== Transmission module =====================
@@ -1436,7 +1457,65 @@ details.adv[open] summary { margin-bottom: 16px; }
   $("hintDismiss").addEventListener("click", dismissHint);
   buildSteps();
   typeStory(() => { $("reachBtn").hidden = false; $("reachBtn").focus(); });
+
+  /* ===================== Path routing =====================
+     One clean URL per screen, e.g. /repo-name/transmission, so tools that key on the URL
+     (such as a comments layer) see each screen as its own page.
+     Switched on only when the page has <meta name="path-routing" content="on"> (the GitHub Pages build);
+     elsewhere the explainer behaves as before and the URL never changes. */
+  function ROUTE_OF_STEP_() { return { transduction: "transduction", transmission: "transmission", integration: "spinal-integration", motor: "motor-output" }; }
+  var ROUTE_OF_STEP = ROUTE_OF_STEP_();
+  var ROUTES = ["", "overview", "transduction", "transmission", "spinal-integration", "motor-output", "reflection"];
+  var TITLES = { "": "The kitchen", overview: "Overview", transduction: "Transduction", transmission: "Transmission",
+    "spinal-integration": "Spinal integration", "motor-output": "Motor output", reflection: "Reflection" };
+  var routing = { on: false, base: "/", applying: false, pending: null };
+
+  function detectBase() {
+    // The base is the path the app is served from; strip a known route slug off the end if there is one.
+    const parts = location.pathname.replace(/\/index\.html$/, "/").split("/");
+    if (parts[parts.length - 1] === "") parts.pop();
+    if (ROUTES.indexOf(parts[parts.length - 1]) > 0) parts.pop();
+    return parts.join("/") + "/";
+  }
+  function currentSlug() {
+    const rest = location.pathname.slice(routing.base.length).replace(/\/$/, "");
+    return ROUTES.indexOf(rest) >= 0 ? rest : "";
+  }
+  function syncUrl(slug) {
+    if (!routing || !routing.on || routing.applying) return;
+    routing.pending = slug;
+    if (routing.queued) return;
+    routing.queued = true;
+    queueMicrotask(() => {
+      routing.queued = false;
+      const s = routing.pending, url = routing.base + s;
+      document.title = (s ? TITLES[s] + " · " : "") + "The Withdrawal Reflex";
+      if (location.pathname !== url) { try { history.pushState({ slug: s }, "", url); } catch (e) { /* ignore */ } }
+    });
+  }
+  function applyRoute(slug) {
+    routing.applying = true;
+    try {
+      if (slug === "") { closeModule(); go(1); }
+      else if (slug === "overview") { go(2); closeModule(); }
+      else if (slug === "reflection") { go(2); openFinal(); }
+      else { const id = Object.keys(ROUTE_OF_STEP).find(k => ROUTE_OF_STEP[k] === slug); go(2); openModule(STEPS.find(s => s.id === id)); }
+      document.title = (slug ? TITLES[slug] + " · " : "") + "The Withdrawal Reflex";
+    } finally { routing.applying = false; }
+  }
+  function startRouter() {
+    const meta = document.querySelector('meta[name="path-routing"]');
+    if (!meta || meta.content !== "on") return;
+    routing.base = detectBase();
+    routing.on = true;
+    const slug = currentSlug();
+    history.replaceState({ slug }, "", routing.base + slug + location.search + location.hash);
+    if (slug) applyRoute(slug);
+    window.addEventListener("popstate", () => applyRoute(currentSlug()));
+  }
+  startRouter();
 })();
 </script>
 
-</body></html>
+</body>
+</html>

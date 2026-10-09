@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Withdrawal Reflex</title>
+<script>
+  // GitHub Pages serves this file for any path it can't find, e.g. /repo-name/transmission.
+  // Send the visitor to the app's index.html with the path in the query string (?/transmission);
+  // the script at the top of index.html turns it back into the real path.
+  //
+  // The app's own route names are listed here so the script can tell where the repository
+  // folder ends, whatever the repository is called (works for username.github.io and for
+  // username.github.io/repo-name).
+  var ROUTES = ['overview', 'transduction', 'transmission', 'spinal-integration', 'motor-output', 'reflection'];
+  var l = window.location;
+  var parts = l.pathname.split('/');            // ['', 'repo-name', 'transmission']
+  var i = -1;
+  for (var k = parts.length - 1; k >= 0; k--) { if (ROUTES.indexOf(parts[k]) >= 0) { i = k; break; } }
+  // keep everything before the route name; if no route name is found, keep the first folder (project site)
+  var keep = i >= 0 ? i - 1 : Math.min(1, parts.length - 1);
+  var base = parts.slice(0, keep + 1).join('/') + '/';
+  var rest = parts.slice(keep + 1).join('/').replace(/&/g, '~and~');
+  l.replace(l.protocol + '//' + l.host + base + '?/' + rest +
+    (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') + l.hash);
+</script>
+</head>
+<body></body>
+</html>
