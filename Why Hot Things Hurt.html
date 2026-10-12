@@ -1,0 +1,528 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why Hot Things Hurt</title>
+<style>
+  :root {
+    --bg: #130f0d; --panel: #1c1613; --hot: #ff6b4a; --warm: #ffb454; --cool: #5fb8b0;
+    --nerve: #ffd27a; --channel: #8b5cf6; --lipid: #f6c23e;
+    --ion-na: #b78bfa; --ion-k: #f5b45c; --ion-text: #2a1b40;
+    --fluid-out: #8fd3d8; --fluid-in: #f3b98c;
+    --text: #f3efe9; --text-dim: #a69a8f; --line: #332a24;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); box-sizing: border-box;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) { --bg:#faf6ef; --panel:#fff; --text:#231c16; --text-dim:#7a6f63; --line:#e6ddd0; }
+  }
+  :root[data-theme="light"] { --bg:#faf6ef; --panel:#fff; --text:#231c16; --text-dim:#7a6f63; --line:#e6ddd0; }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,'Segoe UI',sans-serif; min-height:100%; padding:26px 16px 50px; }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: clamp(24px,5vw,32px); margin:0 0 6px; line-height:1.15; }
+  .lede { color: var(--text-dim); font-size: 15px; line-height: 1.5; margin: 0 0 20px; }
+
+  .stage { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 10px 14px 22px; margin-bottom: 16px; }
+  svg { display:block; width:100%; height:auto; overflow: visible; }
+
+  .mood { font-size: 17px; font-weight: 600; min-height: 24px; margin: 8px 0 2px; text-align:center; }
+  .mood-sub { font-size: 13px; color: var(--text-dim); min-height: 18px; text-align:center; }
+
+  .slider-row { margin-top: 16px; padding: 0 4px; }
+  .slider-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-dim); margin-bottom: 8px; }
+  input[type=range] { width: 100%; height: 30px; -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; }
+  input[type=range]::-webkit-slider-runnable-track { height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--cool), var(--warm) 55%, var(--hot)); }
+  input[type=range]::-moz-range-track { height: 10px; border-radius: 5px; background: linear-gradient(90deg, var(--cool), var(--warm) 55%, var(--hot)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:26px; height:26px; border-radius:50%; background:var(--text); border:3px solid var(--panel); box-shadow:0 0 0 1px var(--line); margin-top:-8px; cursor:pointer; }
+  input[type=range]::-moz-range-thumb { width:26px; height:26px; border-radius:50%; background:var(--text); border:3px solid var(--panel); box-shadow:0 0 0 1px var(--line); cursor:pointer; }
+
+  .stat-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; justify-content:center; }
+  .stat-chip { background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 12.5px; color: var(--text-dim); }
+  .stat-chip strong { color: var(--text); font-variant-numeric: tabular-nums; }
+
+  details.science { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 16px 20px; margin-top: 14px; }
+  details.science summary { font-size: 13.5px; cursor: pointer; color: var(--text-dim); }
+  .science-body { margin-top: 14px; font-size: 13px; line-height: 1.6; color: var(--text-dim); }
+  .science-body code { background: var(--bg); padding: 1px 5px; border-radius: 4px; }
+  .adv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px 20px; }
+  .adv-control label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
+  .adv-control input[type=range] { height: 22px; }
+  .adv-control input[type=range]::-webkit-slider-runnable-track { background: var(--line); height: 4px; }
+  .adv-control input[type=range]::-webkit-slider-thumb { width: 16px; height: 16px; margin-top: -6px; }
+  .adv-control input[type=range]::-moz-range-track { background: var(--line); height: 4px; }
+  .adv-control input[type=range]::-moz-range-thumb { width: 16px; height: 16px; }
+
+  .legend { display:flex; gap:16px; justify-content:center; margin-top:4px; font-size:11.5px; color:var(--text-dim); flex-wrap:wrap; }
+  .legend span { display:inline-flex; align-items:center; gap:5px; }
+  .dot-leg { width:9px; height:9px; border-radius:50%; display:inline-block; }
+
+  .figure { margin: 6px 0 2px; }
+  .fig-caption { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 8px; line-height: 1.5; padding: 0 10px; }
+
+  .panel-title { font-size: 14.5px; margin: 2px 0 6px; }
+  .panel-sub { font-size: 12.5px; color: var(--text-dim); line-height: 1.55; margin: 0 0 12px; }
+  #traceSvg { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; }
+  .rate-meter { margin-top: 14px; padding: 0 2px; }
+  .rate-meter-track { position: relative; height: 10px; border-radius: 5px; background: var(--bg); border: 1px solid var(--line); overflow: visible; }
+  .rate-meter-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; border-radius: 5px; background: linear-gradient(90deg, var(--cool), var(--warm) 60%, var(--hot)); transition: width 0.12s linear; }
+  .rate-meter-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-top: 5px; }
+
+  .adv-intro { font-size: 13px; line-height: 1.55; color: var(--text-dim); margin: 0 0 14px; }
+  .scenario-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+  .scenario-btn {
+    font: inherit; font-size: 12px; color: var(--text); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 999px; padding: 7px 13px; cursor: pointer;
+  }
+  .scenario-btn:hover { border-color: var(--text-dim); }
+  .scenario-btn.active { border-color: var(--hot); color: var(--hot); background: color-mix(in srgb, var(--hot) 10%, var(--bg)); }
+  .scenario-status { font-size: 12px; color: var(--text-dim); margin: -8px 0 16px; }
+  .scenario-status strong { color: var(--text); }
+  .param-note { font-size: 11px; color: var(--text-dim); line-height: 1.45; margin: 5px 0 0; }
+  .adv-control { margin-bottom: 4px; }
+  .adv-group-title { font-size: 11.5px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; margin: 18px 0 10px; }
+  .adv-group-title:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Why do hot things hurt?</h1>
+  <p class="lede">Touch something hot and the signal starts in a <strong>nociceptor</strong> — a bare nerve ending threaded into your skin — where heat-sensitive ion channels convert that heat into an electrical current.</p>
+
+  <div class="stage">
+    <figure class="figure">
+    <svg id="pathwaySvg" viewBox="0 0 345 225" role="img" aria-label="A hot object touches the skin. Inside the skin, a nociceptor — a bare nerve ending — reaches up toward the surface. A zoomed-in view of that nerve ending's membrane shows two ion channels, TRPV1 and TRPV2, opening wider as temperature rises.">
+      <defs>
+        <marker id="arrowHeat" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M1,1 L9,5 L1,9 Z" fill="var(--text-dim)"/>
+        </marker>
+        <path id="channelWall" d="M0,-16 C9,-17 13,-11 11,-6 C9,-2 6,-1 5,0 C6,1 9,2 11,6 C13,11 9,17 0,16 Z"/>
+        <g id="lipidUnit">
+          <ellipse cx="0" cy="-8" rx="3.4" ry="2.5" fill="var(--lipid)" stroke="var(--line)" stroke-width="0.8"/>
+          <line x1="0" y1="-5.8" x2="0" y2="-1" stroke="var(--line)" stroke-width="1"/>
+          <ellipse cx="0" cy="8" rx="3.4" ry="2.5" fill="var(--lipid)" stroke="var(--line)" stroke-width="0.8"/>
+          <line x1="0" y1="5.8" x2="0" y2="1" stroke="var(--line)" stroke-width="1"/>
+        </g>
+      </defs>
+
+      <!-- a cross-section of skin, touched by a hot object -->
+      <rect x="14" y="55" width="100" height="125" rx="8" fill="var(--bg)" stroke="var(--line)" stroke-width="1.5"/>
+      <line x1="14" y1="83" x2="114" y2="83" stroke="var(--line)" stroke-width="1" opacity="0.6"/>
+      <text x="20" y="72" font-size="8" fill="var(--text-dim)">epidermis</text>
+      <text x="20" y="150" font-size="8" fill="var(--text-dim)">dermis</text>
+
+      <!-- flame / hot object: grows and glows with the temperature slider, touching the skin surface -->
+      <path id="flameEl" d="M0,-32 C14,-14 10,4 2,10 C12,6 16,16 6,22 C14,20 14,30 4,32 C-6,34 -14,26 -8,16 C-14,16 -14,4 -6,0 C-12,-4 -8,-16 0,-32 Z"
+            transform="translate(62,34) scale(0.6)" fill="var(--hot)"/>
+
+      <!-- nociceptor: a bare, free nerve ending threaded up through the dermis toward the surface -->
+      <path d="M64,172 C58,150 70,125 62,100 C57,85 66,75 64,64" fill="none" stroke="var(--text-dim)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M64,64 L55,68 M64,64 L64,58 M64,64 L73,68" stroke="var(--text-dim)" stroke-width="1.4" stroke-linecap="round"/>
+      <text x="64" y="200" font-size="8.5" font-weight="600" text-anchor="middle" fill="var(--text-dim)">nociceptor</text>
+      <text x="64" y="211" font-size="7" text-anchor="middle" fill="var(--text-dim)">(free nerve ending)</text>
+
+      <!-- zoom: this is the part we blow up into the membrane close-up on the right -->
+      <circle cx="64" cy="63" r="12" fill="none" stroke="var(--text-dim)" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.85"/>
+      <path d="M76,58 C100,48 118,44 138,42" fill="none" stroke="var(--text-dim)" stroke-width="1.5" stroke-dasharray="3 4" marker-end="url(#arrowHeat)"/>
+      <text x="107" y="37" font-size="7.5" text-anchor="middle" fill="var(--text-dim)">zoomed in →</text>
+
+      <!-- membrane close-up, enlarged: TRPV1 and TRPV2 as a lipid bilayer with a purple channel
+           protein whose two halves part to open a pore, continuously with temperature -->
+      <g transform="translate(-221,-2) scale(1.4)">
+        <rect x="258" y="8" width="138" height="144" rx="11" fill="var(--bg)" stroke="var(--line)" stroke-width="1.5"/>
+        <text x="327" y="21" font-size="9.5" text-anchor="middle" fill="var(--text-dim)">membrane close-up</text>
+
+        <defs>
+          <g id="ionNa">
+            <circle r="4.3" fill="var(--ion-na)" stroke="var(--line)" stroke-width="0.6"/>
+            <text text-anchor="middle" y="1.4" font-size="3.6" font-weight="700" fill="var(--ion-text)">Na&#8314;</text>
+          </g>
+          <g id="ionK">
+            <circle r="4.3" fill="var(--ion-k)" stroke="var(--line)" stroke-width="0.6"/>
+            <text text-anchor="middle" y="1.4" font-size="3.6" font-weight="700" fill="var(--ion-text)">K&#8314;</text>
+          </g>
+        </defs>
+
+        <!-- TRPV1 channel -->
+        <text x="327" y="35" font-size="9.5" text-anchor="middle" fill="var(--text-dim)">TRPV1 · 43°C</text>
+        <g transform="translate(327,58)">
+          <rect id="ch1Outside" x="-33" y="-18" width="66" height="9" fill="var(--fluid-out)" opacity="0.3"/>
+          <rect id="ch1Inside" x="-33" y="9" width="66" height="9" fill="var(--fluid-in)" opacity="0.3"/>
+          <!-- ambient ions at their real resting distribution: Na+ concentrated outside, K+ inside -->
+          <use href="#ionNa" x="-26" y="-13.5" opacity="0.55"/><use href="#ionNa" x="25" y="-14.5" opacity="0.55"/>
+          <use href="#ionK" x="-25" y="13.5" opacity="0.55"/><use href="#ionK" x="26" y="14.5" opacity="0.55"/>
+          <use href="#lipidUnit" x="-30" y="0"/><use href="#lipidUnit" x="-19" y="0"/>
+          <use href="#lipidUnit" x="19" y="0"/><use href="#lipidUnit" x="30" y="0"/>
+          <g id="ch1WallR"><use href="#channelWall" fill="var(--channel)" stroke="var(--line)" stroke-width="1.2"/></g>
+          <g id="ch1WallL"><g transform="scale(-1,1)"><use href="#channelWall" fill="var(--channel)" stroke="var(--line)" stroke-width="1.2"/></g></g>
+          <g id="ch1Ions"></g>
+        </g>
+        <text id="ch1Pct" x="327" y="79" font-size="9" text-anchor="middle" fill="var(--text-dim)">0% open</text>
+
+        <!-- TRPV2 channel -->
+        <text x="327" y="97" font-size="9.5" text-anchor="middle" fill="var(--text-dim)">TRPV2 · 52°C</text>
+        <g transform="translate(327,120)">
+          <rect id="ch2Outside" x="-33" y="-18" width="66" height="9" fill="var(--fluid-out)" opacity="0.3"/>
+          <rect id="ch2Inside" x="-33" y="9" width="66" height="9" fill="var(--fluid-in)" opacity="0.3"/>
+          <use href="#ionNa" x="-26" y="-13.5" opacity="0.55"/><use href="#ionNa" x="25" y="-14.5" opacity="0.55"/>
+          <use href="#ionK" x="-25" y="13.5" opacity="0.55"/><use href="#ionK" x="26" y="14.5" opacity="0.55"/>
+          <use href="#lipidUnit" x="-30" y="0"/><use href="#lipidUnit" x="-19" y="0"/>
+          <use href="#lipidUnit" x="19" y="0"/><use href="#lipidUnit" x="30" y="0"/>
+          <g id="ch2WallR"><use href="#channelWall" fill="var(--channel)" stroke="var(--line)" stroke-width="1.2"/></g>
+          <g id="ch2WallL"><g transform="scale(-1,1)"><use href="#channelWall" fill="var(--channel)" stroke="var(--line)" stroke-width="1.2"/></g></g>
+          <g id="ch2Ions"></g>
+        </g>
+        <text id="ch2Pct" x="327" y="141" font-size="9" text-anchor="middle" fill="var(--text-dim)">0% open</text>
+      </g>
+    </svg>
+    <figcaption class="fig-caption">A nociceptor is just a bare nerve ending threaded up through the dermis toward the skin surface — no special sensory capsule, just the membrane itself. The dashed circle zooms into that exact ending. Na&#8314; sits concentrated in the extracellular fluid, K&#8314; inside the cytoplasm — the resting distribution the cell's pumps maintain. As temperature rises, TRPV1 (opening from ~43°C) and TRPV2 (from ~52°C) widen their pores and let Na&#8314; stream through into the nerve ending: the wider the gate, the more ions stream through at once. That inward flow of positive charge <em>is</em> the current that drives the firing rate below.</figcaption>
+    </figure>
+
+    <div class="legend">
+      <span><span class="dot-leg" style="background:var(--ion-na)"></span>Na&#8314; (flows in through TRPV)</span>
+      <span><span class="dot-leg" style="background:var(--ion-k)"></span>K&#8314; (stays inside at rest)</span>
+      <span><span class="dot-leg" style="background:var(--nerve)"></span>membrane voltage, below</span>
+    </div>
+
+    <div class="mood" id="mood">That's comfortably warm</div>
+    <div class="mood-sub" id="moodSub">Channels closed — no current flowing</div>
+
+    <div class="slider-row">
+      <div class="slider-label"><span>Cold</span><span id="tempReadout">47°C</span><span>Scalding</span></div>
+      <input type="range" id="tempSlider" min="30" max="58" step="0.2" value="47" aria-label="Temperature">
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-chip">signals per second <strong id="rateVal">0</strong></div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <h2 class="panel-title">Receptor potential → action potential → firing rate</h2>
+    <p class="panel-sub">The Na&#8314; current from above doesn't fire a spike directly — it first builds a <strong>graded receptor (generator) potential</strong>: the slow climbing part of the trace, proportional to how much current is flowing. Only when that climb crosses threshold do fast <strong>voltage-gated Na&#8314; channels</strong> — a different protein entirely — flip open and fire one all-or-none <strong>action potential</strong>, the sharp spike. Count spikes per second and you get the <strong>firing rate</strong>: how temperature is actually encoded, not the spike's size (every spike looks identical).</p>
+    <svg id="traceSvg" viewBox="0 0 400 120" role="img" aria-label="Scrolling trace of membrane potential over time. A dashed line marks the firing threshold; the slow climb is the graded receptor potential; whenever it touches threshold, a sharp action potential fires and the trace resets.">
+      <line x1="0" y1="20" x2="400" y2="20" stroke="var(--hot)" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>
+      <text x="4" y="14" font-size="8.5" fill="var(--hot)" opacity="0.85">threshold (fire!)</text>
+      <line x1="0" y1="83" x2="400" y2="83" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"/>
+      <text x="4" y="96" font-size="8.5" fill="var(--text-dim)">resting potential</text>
+      <polyline id="vTrace" fill="none" stroke="var(--nerve)" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+    <div class="rate-meter">
+      <div class="rate-meter-track"><div class="rate-meter-fill" id="rateFill"></div></div>
+      <div class="rate-meter-labels"><span>0 Hz</span><span>50 Hz</span></div>
+    </div>
+  </div>
+
+  <details class="science">
+    <summary>For the curious: the actual model underneath</summary>
+    <div class="science-body">
+      <strong>Step 1 — heat changes a protein's shape.</strong> TRPV1 and TRPV2 sit side by side in the nerve ending's membrane. TRPV1 opens starting around <code>43°C</code> — the half-activation point measured by Caterina et al. (1997) — and TRPV2 only once it's genuinely extreme, around <code>52°C</code>. Each follows its own S-shaped (Boltzmann) curve: a probability of being open at any instant, not a switch — that's what the sliding purple gates represent.
+      <br><br>
+      <strong>Step 2 — the open channel is where "electrical" actually starts.</strong> Once open, the pore mostly passes <strong>Na&#8314;</strong>. Sodium is concentrated outside the cell and the inside sits at a negative resting voltage, so Na&#8314; is pulled in down its electrochemical gradient the instant the gate opens — drawn as the falling ion in the diagram. That inward trickle of positive charge <em>is</em> the current: <code>I_total = I_TRPV1(T) + I_TRPV2(T)</code>. Below 43°C neither channel contributes; between 43°C and 52°C only TRPV1 is active; above 52°C both are open at once, so the current climbs faster.
+      <br><br>
+      <strong>Step 3 — current builds a graded receptor potential.</strong> That Na&#8314; current depolarizes the membrane locally, proportional to how much is flowing — the slow climbing part of the trace above. This is <em>not</em> a spike yet; it's called a receptor (or generator) potential, and it can be small or large, fast or slow, matching the stimulus continuously.
+      <br><br>
+      <strong>Step 4 — threshold triggers a completely different channel.</strong> If that climb depolarizes the nerve's spike-initiation zone past roughly <code>−55 mV</code>, <strong>voltage-gated Na&#8314; channels</strong> — unrelated proteins to TRPV1/2 — flip open in a self-reinforcing cascade, firing one full, all-or-none <strong>action potential</strong>: the sharp overshoot in the trace (a real spike reaches roughly <code>+30 mV</code>) before the membrane resets and starts climbing again.
+      <br><br>
+      <strong>Step 5 — the rate is the message.</strong> Our leaky integrate-and-fire model compresses steps 3–4 into one climb-and-reset equation, which is why the trace's rise looks smooth right up to a sudden spike. Every action potential looks identical; only how often they fire — the rate — carries the information about how hot it actually is. This page deliberately stops there — it doesn't model fiber types, the spinal cord, or a motor reflex.
+    </div>
+  </details>
+
+  <details class="science">
+    <summary>Optional: adjust the model's own settings</summary>
+    <div class="science-body">
+      <p class="adv-intro">Every slider below is a real physiological knob, not just a visual tweak. Pick a scenario to see how a biological condition changes which numbers move — or drag any slider by hand and the scenario below switches to "Custom."</p>
+
+      <div class="scenario-row" id="scenarioRow">
+        <button class="scenario-btn" data-scenario="healthy">Healthy skin</button>
+        <button class="scenario-btn" data-scenario="inflamed">Inflamed / sunburned</button>
+        <button class="scenario-btn" data-scenario="desensitized">Capsaicin-desensitized</button>
+        <button class="scenario-btn" data-scenario="cooled">Cooled / iced</button>
+        <button class="scenario-btn" data-scenario="chronic">Chronic pain (allodynia)</button>
+        <button class="scenario-btn" data-scenario="numb">Nerve-blocked / numb</button>
+      </div>
+      <p class="scenario-status">Modeling: <strong id="scenarioLabel">Healthy skin (default)</strong></p>
+
+      <p class="adv-group-title">TRPV1 — early-warning heat channel</p>
+      <div class="adv-grid">
+        <div class="adv-control"><label><span>Threshold</span><span id="vTthresh">43.0°C</span></label>
+          <input type="range" id="pTthresh" min="30" max="66" step="0.5" value="43">
+          <p class="param-note">The channel's natural switch-on point. Inflammatory mediators (bradykinin, prostaglandins) released by damaged tissue chemically tag TRPV1 and drag this down — sometimes below body temperature, which is why a warm shower stings sunburned skin, or why in chronic pain ordinary warmth starts to hurt (allodynia).</p></div>
+        <div class="adv-control"><label><span>Sharpness (k)</span><span id="vK">0.67</span></label>
+          <input type="range" id="pK" min="0.15" max="2.0" step="0.01" value="0.67">
+          <p class="param-note">How co-operatively the channel's subunits snap open together. Higher reads as a hair-trigger; lower feels like a slow-building ache rather than a sudden sting.</p></div>
+        <div class="adv-control"><label><span>Max current</span><span id="vImax">2.0 nA</span></label>
+          <input type="range" id="pImax" min="0.3" max="4.0" step="0.1" value="2.0">
+          <p class="param-note">How many TRPV1 channels sit in the membrane. Nerve growth factor and chronic inflammation drive the cell to make more of them, raising this — part of why healed-but-inflamed tissue stays hyper-sensitive to heat generally, not just at a lower threshold.</p></div>
+      </div>
+
+      <p class="adv-group-title">TRPV2 — extreme-heat channel</p>
+      <div class="adv-grid">
+        <div class="adv-control"><label><span>Threshold</span><span id="vTthresh2">52.0°C</span></label>
+          <input type="range" id="pTthresh2" min="46" max="76" step="0.5" value="52">
+          <p class="param-note">TRPV2's own switch-on point. It's far less plastic than TRPV1 — inflammation barely shifts it — which is consistent with its job as a fixed, last-resort alarm for tissue-damaging heat.</p></div>
+        <div class="adv-control"><label><span>Sharpness (k)</span><span id="vK2">0.67</span></label>
+          <input type="range" id="pK2" min="0.15" max="2.0" step="0.01" value="0.67">
+          <p class="param-note">Same idea as TRPV1's sharpness, for the high-heat channel.</p></div>
+        <div class="adv-control"><label><span>Max current</span><span id="vImax2">2.0 nA</span></label>
+          <input type="range" id="pImax2" min="0.3" max="4.0" step="0.1" value="2.0">
+          <p class="param-note">Channel density for TRPV2. Changes less in disease than TRPV1's does — included mainly so you can see both currents add together above 52°C.</p></div>
+      </div>
+
+      <p class="adv-group-title">Neuron integration</p>
+      <div class="adv-grid">
+        <div class="adv-control"><label><span>Membrane time constant (&tau;)</span><span id="vTau">10 ms</span></label>
+          <input type="range" id="pTau" min="4" max="30" step="1" value="10">
+          <p class="param-note">How fast charge builds and leaks at the nerve ending itself, once current is already flowing. Cooling a nerve — an ice pack, a cold compress — slows channel and membrane kinetics directly, which is part of why cold numbs pain.</p></div>
+      </div>
+    </div>
+  </details>
+
+</div>
+
+<script>
+(function() {
+  const Vrest=-70, Vth=-55, Vreset=-75, R=10;
+  // Tthresh=43C and k=0.67 (i.e. a Boltzmann slope factor of 1/0.67=1.5C) are
+  // literature-informed values for TRPV1's temperature gating (Caterina et al.,
+  // 1997; computational TRPV1 Boltzmann models). TRPV2 reuses the same slope
+  // shape, shifted to its own measured half-activation point (~52C). Imax and
+  // tau remain illustrative — they scale the picture, not a specific measured
+  // neuron.
+  const state = {
+    Tthresh:43, k:0.67, Imax:2.0,
+    Tthresh2:52, k2:0.67, Imax2:2.0,
+    tau:10
+  };
+  let V = Vrest, T = 47;
+  let spikeTimes = [];
+
+  // --- membrane-potential trace: the actual transduction -> action potential step ---
+  const apPeak = 30; // mV; a real spike overshoots well past threshold before resetting —
+                      // the LIF equation itself stops at threshold, but we draw the true AP shape
+  const traceWindowMs = 4000; // how much history the scrolling trace shows
+  const traceYMin = -82, traceYMax = apPeak + 5; // display range, with headroom above the AP peak
+  let vHistory = [{ t: performance.now(), v: Vrest }];
+  function traceX(t, now) { return 400 - (now - t) / traceWindowMs * 400; }
+  function traceY(v) { return 10 + (traceYMax - v) / (traceYMax - traceYMin) * 100; }
+
+  const el = {
+    temp: document.getElementById('tempSlider'),
+    tempReadout: document.getElementById('tempReadout'),
+    flame: document.getElementById('flameEl'),
+    mood: document.getElementById('mood'),
+    moodSub: document.getElementById('moodSub'),
+    rateVal: document.getElementById('rateVal'),
+    ch1WallL: document.getElementById('ch1WallL'), ch1WallR: document.getElementById('ch1WallR'),
+    ch1Pct: document.getElementById('ch1Pct'),
+    ch1IonsGroup: document.getElementById('ch1Ions'),
+    ch2WallL: document.getElementById('ch2WallL'), ch2WallR: document.getElementById('ch2WallR'),
+    ch2Pct: document.getElementById('ch2Pct'),
+    ch2IonsGroup: document.getElementById('ch2Ions'),
+    vTrace: document.getElementById('vTrace'),
+    rateFill: document.getElementById('rateFill'),
+  };
+
+  const NS = "http://www.w3.org/2000/svg";
+  // a small pool of labeled Na+ ions (each a <use> of the #ionNa symbol defined in the
+  // markup) per channel, evenly spaced in phase, so that opening the gate wider reveals
+  // more of them "in flight" at once — a visible stream, not just one faster dot
+  const MAX_IONS = 3;
+  function makeIonStream(parentGroup) {
+    const ions = [];
+    for (let i = 0; i < MAX_IONS; i++) {
+      const u = document.createElementNS(NS, 'use');
+      u.setAttribute('href', '#ionNa');
+      u.setAttribute('opacity', '0');
+      parentGroup.appendChild(u);
+      ions.push({ el: u, offset: i / MAX_IONS });
+    }
+    return ions;
+  }
+  const ch1Ions = makeIonStream(el.ch1IonsGroup);
+  const ch2Ions = makeIonStream(el.ch2IonsGroup);
+
+  // open probability of a single channel (the Boltzmann/sigmoid itself, 0 to 1)
+  function openProb(T, Tthresh, k) { return 1 / (1 + Math.exp(-k * (T - Tthresh))); }
+  // each channel's current is its max current times how open it is; they add
+  function tempToCurrent(T) {
+    const p1 = openProb(T, state.Tthresh, state.k);
+    const p2 = openProb(T, state.Tthresh2, state.k2);
+    return state.Imax * p1 + state.Imax2 * p2;
+  }
+
+  // animate one channel: the two purple wall-halves slide apart as p rises (closed = touching at
+  // center, open = pulled apart revealing a pore). While open, labeled Na+ ions stream from
+  // outside (top) through the gap to inside (bottom) — the more open the gate, the MORE ions
+  // are visible streaming at once (not just one dot moving faster), the real picture of more current.
+  function updateGate(wallL, wallR, ionStream, pctText, p, now) {
+    const gapHalf = 1 + p * 9; // px from center; ~1 = touching/shut, ~10 = open pore
+    wallL.setAttribute('transform', `translate(${-gapHalf},0)`);
+    wallR.setAttribute('transform', `translate(${gapHalf},0)`);
+    const visibleCount = p > 0.04 ? Math.max(1, Math.round(p * MAX_IONS)) : 0;
+    const duration = 1300 - 800 * p; // ms per outside->inside crossing; faster when more open
+    ionStream.forEach((ion, i) => {
+      if (i < visibleCount) {
+        const phase = ((now / duration) + ion.offset) % 1;
+        ion.el.setAttribute('x', '0');
+        ion.el.setAttribute('y', (-14 + 28 * phase).toFixed(1));
+        ion.el.setAttribute('opacity', (0.5 + 0.5 * p).toFixed(2));
+      } else {
+        ion.el.setAttribute('opacity', 0);
+      }
+    });
+    pctText.textContent = Math.round(p * 100) + '% open';
+  }
+
+  function moodFor(rate) {
+    if (rate < 0.5) return ["That's comfortably warm", "Channels closed — no current flowing"];
+    if (rate < 10) return ["Starting to feel hot", "TRPV1 beginning to open, a few spikes a second"];
+    if (rate < 25) return ["Ouch, that's hot!", "Channels wide open — spikes firing fast"];
+    return ["That's scalding!", "TRPV1 and TRPV2 both fully open — maximum signal"];
+  }
+
+  el.temp.addEventListener('input', () => {
+    T = parseFloat(el.temp.value);
+    el.tempReadout.textContent = T.toFixed(1) + '°C';
+    const scale = (0.5 + (T - 30) / 28 * 0.4).toFixed(2);
+    el.flame.setAttribute('transform', `translate(62,34) scale(${scale})`);
+    el.flame.style.filter = T > 46 ? 'drop-shadow(0 0 7px rgba(255,100,60,0.55))' : 'none';
+  });
+  el.temp.dispatchEvent(new Event('input'));
+
+  function setCustom() {
+    document.getElementById('scenarioLabel').textContent = 'Custom';
+    document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+  }
+  function bindAdv(id, key, labelId, fmt) {
+    const input = document.getElementById(id);
+    input.addEventListener('input', () => {
+      state[key] = parseFloat(input.value);
+      document.getElementById(labelId).textContent = fmt(state[key]);
+      setCustom();
+    });
+  }
+  bindAdv('pTthresh','Tthresh','vTthresh', v=>v.toFixed(1)+'°C');
+  bindAdv('pK','k','vK', v=>v.toFixed(2));
+  bindAdv('pImax','Imax','vImax', v=>v.toFixed(1)+' nA');
+  bindAdv('pTthresh2','Tthresh2','vTthresh2', v=>v.toFixed(1)+'°C');
+  bindAdv('pK2','k2','vK2', v=>v.toFixed(2));
+  bindAdv('pImax2','Imax2','vImax2', v=>v.toFixed(1)+' nA');
+  bindAdv('pTau','tau','vTau', v=>v.toFixed(0)+' ms');
+
+  // --- biological scenarios: preset combinations of the above knobs ---
+  const advMeta = {
+    Tthresh:  { input:'pTthresh',  label:'vTthresh',  fmt:v=>v.toFixed(1)+'°C' },
+    k:        { input:'pK',        label:'vK',        fmt:v=>v.toFixed(2) },
+    Imax:     { input:'pImax',     label:'vImax',     fmt:v=>v.toFixed(1)+' nA' },
+    Tthresh2: { input:'pTthresh2', label:'vTthresh2', fmt:v=>v.toFixed(1)+'°C' },
+    k2:       { input:'pK2',       label:'vK2',       fmt:v=>v.toFixed(2) },
+    Imax2:    { input:'pImax2',    label:'vImax2',    fmt:v=>v.toFixed(1)+' nA' },
+    tau:      { input:'pTau',      label:'vTau',      fmt:v=>v.toFixed(0)+' ms' },
+  };
+  const SCENARIOS = {
+    healthy: {
+      label: 'Healthy skin (default)',
+      params: { Tthresh:43, k:0.67, Imax:2.0, Tthresh2:52, k2:0.67, Imax2:2.0, tau:10 }
+    },
+    inflamed: {
+      label: 'Inflamed / sunburned skin',
+      params: { Tthresh:37, k:0.9, Imax:3.2, Tthresh2:52, k2:0.67, Imax2:2.0, tau:10 }
+    },
+    desensitized: {
+      label: 'Capsaicin-desensitized',
+      params: { Tthresh:47, k:0.35, Imax:0.5, Tthresh2:54, k2:0.5, Imax2:1.5, tau:14 }
+    },
+    cooled: {
+      label: 'Cooled / iced skin',
+      params: { Tthresh:43, k:0.4, Imax:1.3, Tthresh2:52, k2:0.4, Imax2:1.3, tau:24 }
+    },
+    chronic: {
+      label: 'Chronic pain (allodynia)',
+      params: { Tthresh:34, k:0.9, Imax:3.0, Tthresh2:50, k2:0.7, Imax2:2.2, tau:9 }
+    },
+    numb: {
+      label: 'Nerve-blocked / numb (e.g. local anesthetic)',
+      params: { Tthresh:65, k:0.2, Imax:0.3, Tthresh2:75, k2:0.2, Imax2:0.3, tau:22 }
+    },
+  };
+
+  function applyScenario(key) {
+    const sc = SCENARIOS[key];
+    if (!sc) return;
+    Object.keys(sc.params).forEach(k => {
+      const v = sc.params[k];
+      state[k] = v;
+      const meta = advMeta[k];
+      document.getElementById(meta.input).value = v;
+      document.getElementById(meta.label).textContent = meta.fmt(v);
+    });
+    document.getElementById('scenarioLabel').textContent = sc.label;
+    document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.scenario === key));
+  }
+
+  document.getElementById('scenarioRow').addEventListener('click', (e) => {
+    const btn = e.target.closest('.scenario-btn');
+    if (!btn) return;
+    applyScenario(btn.dataset.scenario);
+  });
+
+  applyScenario('healthy');
+
+  const dt = 0.5;
+  let lastTime = performance.now(), accumulator = 0;
+
+  function loop(now) {
+    const realDtMs = Math.min(now - lastTime, 100);
+    lastTime = now;
+    accumulator += realDtMs;
+
+    let spikedThisFrame = false;
+    while (accumulator >= dt) {
+      const I = tempToCurrent(T);
+      const dV = (-(V - Vrest) + R * I) / state.tau * dt;
+      V += dV;
+      if (V >= Vth) {
+        V = Vreset;
+        spikedThisFrame = true;
+        spikeTimes.push(now);
+      }
+      accumulator -= dt;
+    }
+
+    // record the membrane trace: a real neuron doesn't stop at threshold, it fires a brief,
+    // large action potential and then resets — so on a spike we draw that overshoot explicitly
+    if (spikedThisFrame) vHistory.push({ t: now, v: apPeak });
+    vHistory.push({ t: now, v: V });
+    const traceCutoff = now - traceWindowMs - 50;
+    while (vHistory.length > 2 && vHistory[0].t < traceCutoff) vHistory.shift();
+    el.vTrace.setAttribute('points', vHistory.map(p => `${traceX(p.t, now).toFixed(1)},${traceY(p.v).toFixed(1)}`).join(' '));
+
+    // update the two channel gates every frame so they track T and the advanced sliders live
+    const p1 = openProb(T, state.Tthresh, state.k);
+    const p2 = openProb(T, state.Tthresh2, state.k2);
+    updateGate(el.ch1WallL, el.ch1WallR, ch1Ions, el.ch1Pct, p1, now);
+    updateGate(el.ch2WallL, el.ch2WallR, ch2Ions, el.ch2Pct, p2, now);
+
+    const cutoff = now - 1000;
+    spikeTimes = spikeTimes.filter(t => t > cutoff);
+    const rate = spikeTimes.length;
+    el.rateVal.textContent = rate;
+    el.rateFill.style.width = Math.min(100, rate / 50 * 100).toFixed(1) + '%';
+
+    const [moodText, subText] = moodFor(rate);
+    el.mood.textContent = moodText;
+    el.moodSub.textContent = subText;
+
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
+
+</body></html>
